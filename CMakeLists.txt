@@ -151,7 +151,8 @@ if (BUILD_PADDLE2ONNX_PYTHON)
     target_link_libraries(paddle2onnx_cpp2py_export PRIVATE p2o_paddle_proto onnx)
 
     if (MSVC)
-        target_link_libraries(paddle2onnx_cpp2py_export PRIVATE ${PYTHON_LIBRARIES})
+        find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+        target_link_libraries(paddle2onnx_cpp2py_export PRIVATE ${Python3_LIBRARIES})
         target_compile_options(paddle2onnx_cpp2py_export
                 PRIVATE /MP
                 /wd4244 # 'argument': conversion from 'google::protobuf::uint64' to 'int', possible loss of data
