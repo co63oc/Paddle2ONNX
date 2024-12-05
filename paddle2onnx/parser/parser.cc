@@ -123,14 +123,14 @@ bool PaddleParser::LoadParamsFromMemoryBuffer(
       read_size += sizeof(version);
     }
     {
-      // read lod_level, we don't use it
+      // read legacy_lod_level, we don't use it
       // this has to be zero, otherwise not support
-      uint64_t lod_level;
-      params_buffer.copy(reinterpret_cast<char*>(&lod_level), sizeof(lod_level),
+      uint64_t legacy_lod_level;
+      params_buffer.copy(reinterpret_cast<char*>(&legacy_lod_level), sizeof(legacy_lod_level),
                          read_size);
-      read_size += sizeof(lod_level);
-      if (lod_level != 0) {
-        P2OLogger() << "Only supports weight with lod_level = 0." << std::endl;
+      read_size += sizeof(legacy_lod_level);
+      if (legacy_lod_level != 0) {
+        P2OLogger() << "Only supports weight with legacy_lod_level = 0." << std::endl;
         return false;
       }
     }
@@ -202,14 +202,14 @@ bool PaddleParser::LoadParamsFromMemoryBuffer(const void* params_buffer,
       params_size -= sizeof(version);
     }
     {
-      // read lod_level, we don't use it
+      // read legacy_lod_level, we don't use it
       // this has to be zero, otherwise not support
-      uint64_t lod_level;
-      std::memcpy(&lod_level, read_pointer, sizeof(lod_level));
-      read_pointer += sizeof(lod_level);
-      params_size -= sizeof(lod_level);
-      if (lod_level != 0) {
-        P2OLogger() << "Only supports weight with lod_level = 0." << std::endl;
+      uint64_t legacy_lod_level;
+      std::memcpy(&legacy_lod_level, read_pointer, sizeof(legacy_lod_level));
+      read_pointer += sizeof(legacy_lod_level);
+      params_size -= sizeof(legacy_lod_level);
+      if (legacy_lod_level != 0) {
+        P2OLogger() << "Only supports weight with legacy_lod_level = 0." << std::endl;
         return false;
       }
     }
@@ -280,13 +280,13 @@ bool PaddleParser::LoadParams(const std::string& path) {
       is.read(reinterpret_cast<char*>(&version), sizeof(version));
     }
     {
-      // read lod_level, we don't use it
+      // read legacy_lod_level, we don't use it
       // this has to be zero, otherwise not support
-      uint64_t lod_level;
-      read_size += sizeof(lod_level);
-      is.read(reinterpret_cast<char*>(&lod_level), sizeof(lod_level));
-      Assert(lod_level == 0,
-             "Paddle2ONNX: Only support weight with lod_level = 0.");
+      uint64_t legacy_lod_level;
+      read_size += sizeof(legacy_lod_level);
+      is.read(reinterpret_cast<char*>(&legacy_lod_level), sizeof(legacy_lod_level));
+      Assert(legacy_lod_level == 0,
+             "Paddle2ONNX: Only support weight with legacy_lod_level = 0.");
     }
     {
       // Another version, we don't use it
